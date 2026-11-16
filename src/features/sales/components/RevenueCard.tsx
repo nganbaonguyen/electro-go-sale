@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {colors, radius, spacing, typography} from '../../../shared/theme';
-import {formatCurrency} from '../utils/formatCurrency';
+import {formatCurrency} from '../../../shared/utils/formatCurrency';
 
 type Props = {total: number; orderCount: number};
 

@@ -1,39 +1,52 @@
 import React from 'react';
 import {Alert, Pressable, ScrollView, StyleSheet, Text} from 'react-native';
 import {Ionicons} from '@react-native-vector-icons/ionicons/static';
+import {icons} from '../../../assets/icons';
+import StateView from '../../../shared/components/StateView';
 import {colors, radius, spacing, typography} from '../../../shared/theme';
 import OrderList from '../components/OrderList';
 import RevenueCard from '../components/RevenueCard';
-import {MOCK_ORDERS} from '../data/mockOrders';
+import {useOrders} from '../hooks/useOrders';
+import {orderTotal} from '../utils';
 
-export default function SalesScreen() {
-  const total = MOCK_ORDERS.reduce((sum, o) => sum + o.total, 0);
+type Props = {onOpenOrder: (orderId: string) => void};
+
+export default function SalesScreen({onOpenOrder}: Props) {
+  const orders = useOrders();
+
+  if (orders.status !== 'ready' || !orders.data) {
+    return (
+      <StateView
+        status={orders.status === 'error' ? 'error' : 'loading'}
+        message={orders.error}
+        onRetry={orders.reload}
+      />
+    );
+  }
+
+  const total = orders.data.reduce((sum, o) => sum + orderTotal(o), 0);
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <Text style={styles.title}>Bán hàng</Text>
-
-      <RevenueCard total={total} orderCount={MOCK_ORDERS.length} />
+    <ScrollView contentContainerStyle={styles.content}>
+      <RevenueCard total={total} orderCount={orders.data.length} />
 
       <Pressable
         accessibilityRole="button"
         accessibilityLabel="Tạo đơn mới"
         onPress={() => Alert.alert('Tạo đơn', 'Tính năng đang được phát triển')}
         style={({pressed}) => [styles.createButton, pressed && styles.pressed]}>
-        <Ionicons name="add-circle-outline" size={22} color={colors.textOnPrimary} />
+        <Ionicons name={icons.add} size={22} color={colors.textOnPrimary} />
         <Text style={styles.createText}>Tạo đơn mới</Text>
       </Pressable>
 
       <Text style={styles.section}>Đơn hàng gần đây</Text>
-      <OrderList orders={MOCK_ORDERS} />
+      <OrderList orders={orders.data} onPressOrder={onOpenOrder} />
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: colors.background},
   content: {padding: spacing.xl},
-  title: {...typography.headline, color: colors.textPrimary, marginBottom: spacing.lg},
   createButton: {
     flexDirection: 'row',
     alignItems: 'center',

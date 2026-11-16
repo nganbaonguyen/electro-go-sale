@@ -1,10 +1,12 @@
 import React from 'react';
-import {SalesScreen} from '../features/sales';
+import ErrorBoundary from '../shared/components/ErrorBoundary';
+import MiniNavigator from './navigation/MiniNavigator';
 
-/**
- * Component gốc của mini app Bán hàng.
- * Khi cần nhiều màn hình, đặt navigator của mini app ở đây.
- */
+/** Component gốc của mini app Bán hàng: bọc ErrorBoundary rồi vào điều hướng nội bộ. */
 export default function SaleApp() {
-  return <SalesScreen />;
+  return (
+    <ErrorBoundary>
+      <MiniNavigator />
+    </ErrorBoundary>
+  );
 }

@@ -1,2 +1,3 @@
-// Điểm vào của mini app Bán hàng: host chỉ import default từ package này.
+// Điểm vào của mini app. Host chỉ import từ file này.
 export {default} from './app/SaleApp';
+export {manifest} from './manifest';
