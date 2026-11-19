@@ -5,6 +5,7 @@ import {HubScreen} from '../../features/hub';
 import {ProductsScreen} from '../../features/products';
 import {ReportScreen} from '../../features/report';
 import {OrderDetailScreen, SalesScreen} from '../../features/sales';
+import BuildStamp from '../../shared/components/BuildStamp';
 import ScreenHeader from '../../shared/components/ScreenHeader';
 import {useStack} from '../../shared/navigation/useStack';
 import {colors} from '../../shared/theme';
@@ -63,6 +64,7 @@ export default function MiniNavigator({initialRoute}: Props) {
     <View style={styles.container}>
       <ScreenHeader title={TITLES[current.name]} onBack={canGoBack ? pop : undefined} />
       {renderScreen()}
+      <BuildStamp />
     </View>
   );
 }
